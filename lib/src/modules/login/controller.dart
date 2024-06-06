@@ -10,6 +10,7 @@ class LoginController extends ValueNotifier<StateApp> {
   Future read() async {
     state.value = StateApp.loading;
     try {
+      await _loginRepository.read();
       state.value = StateApp.success;
     } catch (e) {
       state.value = StateApp.error;
