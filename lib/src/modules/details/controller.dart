@@ -16,4 +16,14 @@ class DetailsController extends ValueNotifier<StateApp> {
       state.value = StateApp.error;
     }
   }
+
+  Future update(int status, int id) async {
+    state.value = StateApp.loading;
+    try {
+      await _detailsRepository.update(status, id);
+      state.value = StateApp.success;
+    } catch (e) {
+      state.value = StateApp.error;
+    }
+  }
 }

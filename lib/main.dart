@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gl/src/modules/details/screen.dart';
+import 'package:gl/src/route/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,14 +10,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    AppRouter? appRouter = AppRouter();
+
+    return MaterialApp.router(
       title: 'Jobify',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const DetailsScreen(),
+      routeInformationParser: appRouter!.defaultRouteParser(),
+      routerDelegate: appRouter.delegate(),
     );
   }
 }

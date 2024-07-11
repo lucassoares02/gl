@@ -1,9 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gl/src/components/button.dart';
+import 'package:gl/src/modules/create/controller.dart';
+import 'package:gl/src/modules/create/repository.dart';
+import 'package:gl/src/state/state_app.dart';
 import 'package:gl/src/utils/app_spacing.dart';
 import 'package:gl/src/utils/decorations.dart';
 import 'package:gl/src/utils/spacing.dart';
 
+@RoutePage()
 class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});
 
@@ -12,6 +17,16 @@ class CreateScreen extends StatefulWidget {
 }
 
 class _CreateScreenState extends State<CreateScreen> {
+  CreateController createController = CreateController(StateApp.start, CreateRepository());
+  TextEditingController addressController = TextEditingController();
+  TextEditingController clientController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController budgetController = TextEditingController();
+  TextEditingController serviceController = TextEditingController();
+  TextEditingController initDateController = TextEditingController();
+  TextEditingController finishDateController = TextEditingController();
+  TextEditingController expenseController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +44,9 @@ class _CreateScreenState extends State<CreateScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          AutoRouter.of(context).pop();
+                        },
                         icon: const Icon(Icons.arrow_back_ios),
                       ),
                     ],
@@ -67,57 +84,92 @@ class _CreateScreenState extends State<CreateScreen> {
                   const Text("Endereço", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: addressController,
                     decoration: appInputDecoration(label: "Adicione um endereço..."),
                   ),
                   const AppSpacing(),
                   const Text("Data início", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: initDateController,
+                    keyboardType: TextInputType.datetime,
                     decoration: appInputDecoration(label: "DD/MM/AAAA"),
                   ),
                   const AppSpacing(),
                   const Text("Data fim", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: finishDateController,
                     decoration: appInputDecoration(label: "DD/MM/AAAA"),
                   ),
                   const AppSpacing(),
                   const Text("Despesas", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: expenseController,
                     decoration: appInputDecoration(label: "R\$320,00"),
+                  ),
+                  const AppSpacing(),
+                  const Text("Contato", style: appLabelText),
+                  const SizedBox(height: 5),
+                  TextFormField(
+                    controller: phoneController,
+                    decoration: appInputDecoration(label: "(27) 9 9999-9999"),
                   ),
                   const AppSpacing(),
                   const Text("Orçamento", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {});
+                    },
+                    controller: budgetController,
                     decoration: appInputDecoration(label: "R\$130,00"),
                   ),
                   const AppSpacing(),
                   const Text("Cliente", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    controller: clientController,
                     decoration: appInputDecoration(label: "Adicione o cliente"),
                   ),
                   const AppSpacing(),
-                  const Text("Descrição", style: appLabelText),
+                  const Text("Serviço", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
-                    decoration: appInputDecoration(label: "Adicione uma descrição"),
+                    controller: serviceController,
+                    decoration: appInputDecoration(label: "Ex: Pedreiro"),
                   ),
                   const AppSpacing(),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Total "),
+                      const Text("Total "),
                       Text(
-                        "R\$450,00",
+                        budgetController.text,
                         style: appLabelText,
                       ),
                     ],
                   ),
                   const AppSpacing(),
-                  AppButton(label: "Enviar", onPressed: () {})
+                  AppButton(
+                      label: "Enviar",
+                      onPressed: () async {
+                        await createController.create(
+                          addressController.text,
+                          clientController.text,
+                          serviceController.text,
+                          phoneController.text,
+                          budgetController.text,
+                          initDateController.text,
+                          finishDateController.text,
+                          expenseController.text,
+                        );
+
+                        if (createController.state.value == StateApp.success) {
+                          AutoRouter.of(context).replaceNamed("/home");
+                        }
+                      })
                 ],
               ),
             ],

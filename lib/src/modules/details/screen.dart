@@ -1,16 +1,29 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:gl/src/components/button.dart';
+import 'package:gl/src/modules/details/controller.dart';
+import 'package:gl/src/modules/details/repository.dart';
+import 'package:gl/src/modules/home/model.dart';
+import 'package:gl/src/state/state_app.dart';
 import 'package:gl/src/utils/app_spacing.dart';
 import 'package:gl/src/utils/decorations.dart';
 import 'package:gl/src/utils/spacing.dart';
 
+@RoutePage()
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key});
+  const DetailsScreen({
+    super.key,
+    this.schedule,
+  });
+
+  final Schedules? schedule;
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  DetailsController detailsController = DetailsController(StateApp.start, DetailsRepository());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +41,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          AutoRouter.of(context).pop();
+                        },
                         icon: const Icon(Icons.arrow_back_ios),
                       ),
                     ],
@@ -63,41 +78,41 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     style: appLabelText,
                   ),
                   const AppSpacing(),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Cliente"),
-                          Text("Argenor Fonseca", style: appLabelText),
+                          const Text("Cliente"),
+                          Text("${widget.schedule!.client}", style: appLabelText),
                         ],
                       ),
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Despesas"),
-                          Text("R\$120,00", style: appLabelText),
+                          Text("R\$0,00", style: appLabelText),
                         ],
                       ),
                     ],
                   ),
                   const AppSpacing(),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Orçamento"),
-                          Text("R\$330,00", style: appLabelText),
+                          const Text("Orçamento"),
+                          Text("R\$${widget.schedule!.budget}", style: appLabelText),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Cidade"),
-                          Text("Serra-ES", style: appLabelText),
+                          const Text("Cidade"),
+                          Text("${widget.schedule!.address}", style: appLabelText),
                         ],
                       ),
                     ],
@@ -124,27 +139,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   const AppSpacing(),
                   const Text("Descrição"),
-                  const Text("Elétrica", style: appLabelText),
+                  Text("${widget.schedule!.service}", style: appLabelText),
                   const AppSpacing(),
                   const AppSpacing(),
                   const AppSpacing(),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Despesas "),
+                      const Text("Despesas "),
                       Text(
-                        "R\$120,00",
+                        "R\$${widget.schedule!.budget}",
                         style: appLabelText,
                       ),
                     ],
                   ),
                   const AppSpacing(),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Total "),
+                      const Text("Total "),
                       Text(
-                        "R\$450,00",
+                        "R\$${widget.schedule!.budget}",
                         style: appLabelText,
                       ),
                     ],
@@ -157,6 +172,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       Text(
                         "R\$330,00",
                         style: appLabelText,
+                      ),
+                    ],
+                  ),
+                  const AppSpacing(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        child: const Text("Recusar"),
+                        onPressed: () {
+                          detailsController.update(0, widget.schedule!.id!);
+                        },
+                      ),
+                      const AppSpacing(),
+                      AppButton(
+                        label: "Aceitar",
+                        onPressed: () {
+                          detailsController.update(1, widget.schedule!.id!);
+                          if (detailsController.state.value == StateApp.success) {
+                            AutoRouter.of(context).pushNamed("/home");
+                          }
+                        },
                       ),
                     ],
                   ),
