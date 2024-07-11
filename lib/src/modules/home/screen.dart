@@ -7,6 +7,7 @@ import 'package:gl/src/state/state_app.dart';
 import 'package:gl/src/utils/app_spacing.dart';
 import 'package:gl/src/utils/decorations.dart';
 import 'package:gl/src/utils/spacing.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {
@@ -60,9 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Row(
                               children: [
-                                Text("Bem vindo, ", style: TextStyle(fontSize: 24)),
+                                Text("Bem vindo", style: TextStyle(fontSize: 24)),
                                 Text(
-                                  "Marcos",
+                                  "",
                                   style: appTitleText,
                                 ),
                               ],
@@ -108,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ? AppCard(
                                         schedule: schedule,
                                         title: "${schedule.service}",
-                                        date: "23/04/2002",
-                                        day: "3 dias",
+                                        date: DateFormat("dd/MM/yyyy").format(DateTime.parse(schedule.initDate!)),
+                                        day: "${schedule.status}",
                                         location: "${schedule.address}",
                                         color: schedule.status == "Confirmado"
                                             ? Colors.green
@@ -140,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ? AppCard(
                                             schedule: schedule,
                                             title: "${schedule.service}",
-                                            date: "23/04/2002",
-                                            day: "3 dias",
+                                            date: DateFormat("dd/MM/yyyy").format(DateTime.parse(schedule.initDate!)),
+                                            day: "${schedule.status}",
                                             location: "${schedule.address}",
                                             color: Colors.orange,
                                           )

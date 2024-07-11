@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gl/src/components/button.dart';
 import 'package:gl/src/modules/create/controller.dart';
 import 'package:gl/src/modules/create/repository.dart';
@@ -59,7 +60,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Marcos",
+                            "",
                             style: appTitleText,
                           ),
                           Text("Qual será o nosso próximo serviço?"),
@@ -106,7 +107,9 @@ class _CreateScreenState extends State<CreateScreen> {
                   const Text("Despesas", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: expenseController,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: appInputDecoration(label: "R\$320,00"),
                   ),
                   const AppSpacing(),
@@ -120,9 +123,13 @@ class _CreateScreenState extends State<CreateScreen> {
                   const Text("Orçamento", style: appLabelText),
                   const SizedBox(height: 5),
                   TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     onChanged: (value) {
                       setState(() {});
                     },
+                    keyboardType: TextInputType.number,
                     controller: budgetController,
                     decoration: appInputDecoration(label: "R\$130,00"),
                   ),
@@ -141,16 +148,17 @@ class _CreateScreenState extends State<CreateScreen> {
                     decoration: appInputDecoration(label: "Ex: Pedreiro"),
                   ),
                   const AppSpacing(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text("Total "),
-                      Text(
-                        budgetController.text,
-                        style: appLabelText,
-                      ),
-                    ],
-                  ),
+                  if (budgetController.text.isNotEmpty && expenseController.text.isNotEmpty)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text("Total "),
+                        Text(
+                          "${int.parse(budgetController.text) + int.parse(expenseController.text)}",
+                          style: appLabelText,
+                        ),
+                      ],
+                    ),
                   const AppSpacing(),
                   AppButton(
                       label: "Enviar",
