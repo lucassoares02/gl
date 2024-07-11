@@ -12,5 +12,5 @@ De maneira organizada, o app deve ser capaz de disponibilizar as informações d
 
 *O acesso a documentos do Google Docs devem ser obtidos a partir de emails @ucl.br*
 - [Documento de Visão de Software](https://docs.google.com/document/d/1kkrXKGUjJsGNcHl59jbEOfw4OC0xD3iqCSGIBbrUsrU/edit?usp=sharing)
-- [Protótipo de Alta Fidelidade](https://docs.flutter.dev/cookbook](https://www.figma.com/proto/aZSyNG9Sq3XZOVrhjXIF2X/Untitled?t=M0ZsupNOzbUocMAb-1)
+- [Protótipo de Alta Fidelidade](https://www.figma.com/design/aZSyNG9Sq3XZOVrhjXIF2X/Untitled?node-id=2-265&t=M0ZsupNOzbUocMAb-0)
 - [Repositório Backend .NET do projeto (API própria)](https://github.com/GuilhermeCorrea-C/Jobfy/tree/master)
